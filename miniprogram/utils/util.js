@@ -86,12 +86,14 @@ const showConfirm = (content, title = '提示') => {
   });
 };
 
-// 价格格式化
+// 价格格式化 (分转元)
+// 数据库存储金额时使用分作为单位，避免浮点数精度问题
 const formatPrice = price => {
   return (price / 100).toFixed(2);
 };
 
-// 价格转分
+// 价格转分 (元转分)
+// 将用户输入的元转换为分存入数据库
 const priceToFen = price => {
   return Math.round(price * 100);
 };

@@ -1,0 +1,105 @@
+<!-- pages/staff/customer-search/customer-search.wxml -->
+<view class="customer-search-container">
+  <!-- 搜索栏 -->
+  <view class="search-section">
+    <view class="search-bar">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        type="number" 
+        maxlength="11"
+        placeholder="输入手机号搜索客户" 
+        bindinput="onSearchInput"
+        bindconfirm="doSearch"
+        value="{{searchPhone}}"
+        focus="{{!showAll}}"
+      />
+      <view class="clear-btn" bindtap="clearSearch" wx:if="{{searchPhone}}">×</view>
+    </view>
+    <button class="search-btn" bindtap="doSearch">搜索</button>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="result-section" wx:if="{{searchResult}}">
+    <view class="customer-card">
+      <view class="customer-header">
+        <view class="customer-avatar">{{searchResult.name ? searchResult.name[0] : '客'}}</view>
+        <view class="customer-info">
+          <text class="customer-name">{{searchResult.name || '未设置姓名'}}</text>
+          <text class="customer-phone">{{searchResult.phone}}</text>
+        </view>
+      </view>
+      <view class="customer-stats">
+        <view class="stat-item">
+          <text class="stat-value">¥{{searchResult.balance}}</text>
+          <text class="stat-label">余额</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{searchResult.points}}</text>
+          <text class="stat-label">积分</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{searchResult.examCount}}</text>
+          <text class="stat-label">验光次数</text>
+        </view>
+      </view>
+      <view class="customer-actions">
+        <button class="action-btn exam-btn" bindtap="addExam" data-id="{{searchResult._id}}">
+          <text>📋 添加验光</text>
+        </button>
+        <button class="action-btn recharge-btn" bindtap="rechargeCustomer" data-id="{{searchResult._id}}">
+          <text>💰 充值</text>
+        </button>
+      </view>
+    </view>
+    
+    <!-- 验光历史 -->
+    <view class="exam-history" wx:if="{{searchResult.examRecords.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">验光记录</text>
+      </view>
+      <view class="exam-list">
+        <view class="exam-item" wx:for="{{searchResult.examRecords}}" wx:key="_id">
+          <view class="exam-date">{{item.examDate}}</view>
+          <view class="exam-data">
+            <text>右眼: {{item.rightEye.sphere}} | 左眼: {{item.leftEye.sphere}}</text>
+          </view>
+          <view class="exam-optometrist">验光师: {{item.optometrist}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未找到 -->
+  <view class="not-found" wx:if="{{showNotFound}}">
+    <text class="not-found-icon">😕</text>
+    <text class="not-found-text">未找到该手机号的客户</text>
+    <text class="not-found-tip">请确认手机号是否正确</text>
+  </view>
+
+  <!-- 客户列表 -->
+  <view class="customer-list-section" wx:if="{{showAll && customerList.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">全部客户</text>
+      <text class="customer-count">共 {{customerList.length}} 位</text>
+    </view>
+    <view class="customer-list">
+      <view class="customer-item" wx:for="{{customerList}}" wx:key="_id" bindtap="viewCustomer" data-customer="{{item}}">
+        <view class="customer-avatar small">{{item.name ? item.name[0] : '客'}}</view>
+        <view class="customer-info">
+          <text class="customer-name">{{item.name || '未设置姓名'}}</text>
+          <text class="customer-phone">{{item.phone}}</text>
+        </view>
+        <view class="customer-meta">
+          <text class="days-ago {{item.daysAgo >= 90 ? 'warning' : ''}}">{{item.daysAgo}}天前验光</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!searchResult && !showNotFound && (!showAll || customerList.length === 0)}}">
+    <text class="empty-icon">🔍</text>
+    <text class="empty-text">输入手机号搜索客户</text>
+  </view>
+</view>

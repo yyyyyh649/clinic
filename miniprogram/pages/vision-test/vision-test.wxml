@@ -1,0 +1,136 @@
+<!-- pages/vision-test/vision-test.wxml -->
+<view class="vision-test-container">
+  <!-- 测试进度 -->
+  <view class="progress-section" wx:if="{{testState === 'testing'}}">
+    <view class="progress-bar">
+      <view class="progress-fill" style="width: {{(currentStep / totalSteps) * 100}}%"></view>
+    </view>
+    <text class="progress-text">{{currentStep}} / {{totalSteps}}</text>
+  </view>
+
+  <!-- 说明页面 -->
+  <view class="intro-section" wx:if="{{testState === 'intro'}}">
+    <view class="intro-card">
+      <view class="intro-icon">👁️</view>
+      <text class="intro-title">E视力表测试</text>
+      <text class="intro-desc">本测试通过不同大小和方向的"E"来评估您的视力。请根据E的开口方向选择对应的方向按钮。</text>
+      
+      <view class="tips-list">
+        <view class="tip-item">
+          <text class="tip-icon">📱</text>
+          <text class="tip-text">请保持手机与眼睛距离约40厘米</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-icon">💡</text>
+          <text class="tip-text">在光线充足的环境下进行测试</text>
+        </view>
+        <view class="tip-item">
+          <text class="tip-icon">👀</text>
+          <text class="tip-text">建议分别测试左右眼</text>
+        </view>
+      </view>
+
+      <view class="eye-select">
+        <text class="select-label">选择测试眼睛：</text>
+        <view class="eye-buttons">
+          <view class="eye-btn {{testingEye === 'left' ? 'active' : ''}}" bindtap="selectEye" data-eye="left">
+            <text>左眼</text>
+          </view>
+          <view class="eye-btn {{testingEye === 'right' ? 'active' : ''}}" bindtap="selectEye" data-eye="right">
+            <text>右眼</text>
+          </view>
+          <view class="eye-btn {{testingEye === 'both' ? 'active' : ''}}" bindtap="selectEye" data-eye="both">
+            <text>双眼</text>
+          </view>
+        </view>
+      </view>
+
+      <button class="start-btn" bindtap="startTest">开始测试</button>
+    </view>
+  </view>
+
+  <!-- 测试区域 -->
+  <view class="test-section" wx:if="{{testState === 'testing'}}">
+    <view class="e-display">
+      <view class="e-char" style="font-size: {{currentSize}}rpx; transform: rotate({{currentRotation}}deg);">
+        E
+      </view>
+    </view>
+
+    <view class="level-info">
+      <text>当前级别：{{currentLevel}}</text>
+    </view>
+
+    <view class="direction-buttons">
+      <view class="direction-row">
+        <view class="direction-btn" bindtap="selectDirection" data-direction="up">
+          <text class="arrow">↑</text>
+          <text class="direction-text">上</text>
+        </view>
+      </view>
+      <view class="direction-row middle">
+        <view class="direction-btn" bindtap="selectDirection" data-direction="left">
+          <text class="arrow">←</text>
+          <text class="direction-text">左</text>
+        </view>
+        <view class="center-info">
+          <text class="remaining">{{remainingTime}}s</text>
+        </view>
+        <view class="direction-btn" bindtap="selectDirection" data-direction="right">
+          <text class="arrow">→</text>
+          <text class="direction-text">右</text>
+        </view>
+      </view>
+      <view class="direction-row">
+        <view class="direction-btn" bindtap="selectDirection" data-direction="down">
+          <text class="arrow">↓</text>
+          <text class="direction-text">下</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="test-actions">
+      <button class="skip-btn" bindtap="skipQuestion">看不清</button>
+    </view>
+  </view>
+
+  <!-- 结果页面 -->
+  <view class="result-section" wx:if="{{testState === 'result'}}">
+    <view class="result-card">
+      <view class="result-icon">🎯</view>
+      <text class="result-title">测试完成！</text>
+      
+      <view class="result-details">
+        <view class="result-item">
+          <text class="item-label">测试眼睛</text>
+          <text class="item-value">{{testingEye === 'left' ? '左眼' : testingEye === 'right' ? '右眼' : '双眼'}}</text>
+        </view>
+        <view class="result-item">
+          <text class="item-label">视力等级</text>
+          <text class="item-value vision-level">{{visionLevel}}</text>
+        </view>
+        <view class="result-item">
+          <text class="item-label">正确率</text>
+          <text class="item-value">{{correctRate}}%</text>
+        </view>
+        <view class="result-item">
+          <text class="item-label">测试时间</text>
+          <text class="item-value">{{testTime}}</text>
+        </view>
+      </view>
+
+      <view class="result-tip {{visionStatus}}">
+        <text class="tip-text">{{visionTip}}</text>
+      </view>
+
+      <view class="result-actions">
+        <button class="retry-btn" bindtap="retryTest">重新测试</button>
+        <button class="save-btn" bindtap="saveResult">保存结果</button>
+      </view>
+
+      <view class="disclaimer">
+        <text>* 本测试仅供参考，不能替代专业眼科检查</text>
+      </view>
+    </view>
+  </view>
+</view>

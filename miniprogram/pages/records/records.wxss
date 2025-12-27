@@ -1,0 +1,293 @@
+/* pages/records/records.wxss */
+.records-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+/* 标签栏 */
+.tab-bar {
+  display: flex;
+  background: #ffffff;
+  padding: 0 40rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.tab-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 0;
+  position: relative;
+}
+
+.tab-text {
+  font-size: 32rpx;
+  color: #666666;
+}
+
+.tab-item.active .tab-text {
+  color: #4A90D9;
+  font-weight: 600;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  width: 80rpx;
+  height: 6rpx;
+  background: #4A90D9;
+  border-radius: 3rpx;
+}
+
+/* 通用卡片 */
+.card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.exam-date,
+.test-date {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+/* 验光记录详情 */
+.exam-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.eye-data {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.eye-section {
+  background: #f8f9fa;
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.eye-label {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #4A90D9;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.data-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.data-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.data-label {
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 8rpx;
+}
+
+.data-value {
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.exam-meta {
+  display: flex;
+  gap: 30rpx;
+}
+
+.meta-item {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.exam-note {
+  background: #fff8e6;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+}
+
+.note-label {
+  font-size: 26rpx;
+  color: #e67e22;
+  font-weight: 500;
+}
+
+.note-text {
+  font-size: 26rpx;
+  color: #856404;
+}
+
+/* 历史记录 */
+.section-header {
+  padding: 20rpx 20rpx 10rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-item {
+  margin: 10rpx 20rpx;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.history-date {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.history-optometrist {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.history-brief {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 12rpx;
+}
+
+.view-more {
+  text-align: right;
+}
+
+.view-more text {
+  font-size: 24rpx;
+  color: #4A90D9;
+}
+
+/* 自测记录 */
+.self-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.result-label {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.result-value {
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.result-value.highlight {
+  color: #4A90D9;
+  font-size: 36rpx;
+}
+
+.test-tip {
+  margin-top: 20rpx;
+  padding: 16rpx 20rpx;
+  background: #fff3cd;
+  border-radius: 12rpx;
+}
+
+.test-tip text {
+  font-size: 24rpx;
+  color: #856404;
+}
+
+/* 温馨提示 */
+.tips-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.tip-item {
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 1.6;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 60rpx;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-title {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.empty-tip {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 40rpx;
+}
+
+.action-btn {
+  background: linear-gradient(135deg, #4A90D9 0%, #357ABD 100%);
+  color: #ffffff;
+  font-size: 30rpx;
+  padding: 24rpx 80rpx;
+  border-radius: 48rpx;
+}

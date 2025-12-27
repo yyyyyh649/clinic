@@ -1,0 +1,101 @@
+<!-- pages/admin/customer-management/customer-management.wxml -->
+<view class="customer-management-container">
+  <!-- 搜索栏 -->
+  <view class="search-section">
+    <view class="search-bar">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        type="text" 
+        placeholder="搜索客户姓名或手机号" 
+        bindinput="onSearchInput"
+        bindconfirm="doSearch"
+        value="{{searchKeyword}}"
+      />
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section">
+    <view class="stat-card">
+      <text class="stat-value">{{totalCustomers}}</text>
+      <text class="stat-label">总客户数</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">¥{{totalBalance}}</text>
+      <text class="stat-label">总余额</text>
+    </view>
+  </view>
+
+  <!-- 客户列表 -->
+  <view class="customer-list" wx:if="{{customers.length > 0}}">
+    <view class="customer-item" wx:for="{{customers}}" wx:key="_id" bindtap="viewCustomerDetail" data-customer="{{item}}">
+      <view class="customer-avatar">{{item.name ? item.name[0] : '客'}}</view>
+      <view class="customer-info">
+        <text class="customer-name">{{item.name || '未设置姓名'}}</text>
+        <text class="customer-phone">{{item.phone}}</text>
+      </view>
+      <view class="customer-stats">
+        <text class="balance">¥{{item.balance}}</text>
+        <text class="exam-count">{{item.examCount}}次验光</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{customers.length === 0 && !isLoading}}">
+    <text class="empty-icon">👥</text>
+    <text class="empty-text">暂无客户数据</text>
+  </view>
+
+  <!-- 客户详情弹窗 -->
+  <view class="detail-modal" wx:if="{{showDetail}}" bindtap="closeDetail">
+    <view class="detail-content" catchtap="">
+      <view class="detail-header">
+        <text class="detail-title">客户详情</text>
+        <view class="close-btn" bindtap="closeDetail">×</view>
+      </view>
+      
+      <view class="detail-body">
+        <view class="info-section">
+          <view class="info-row">
+            <text class="info-label">姓名</text>
+            <text class="info-value">{{currentCustomer.name || '未设置'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">手机号</text>
+            <text class="info-value">{{currentCustomer.phone}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">会员余额</text>
+            <text class="info-value balance">¥{{currentCustomer.balance}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">积分</text>
+            <text class="info-value">{{currentCustomer.points}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">验光次数</text>
+            <text class="info-value">{{currentCustomer.examCount}}次</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">注册时间</text>
+            <text class="info-value">{{currentCustomer.registerTime}}</text>
+          </view>
+        </view>
+
+        <!-- 最近验光记录 -->
+        <view class="exam-section" wx:if="{{currentCustomer.latestExam}}">
+          <text class="section-title">最近验光</text>
+          <view class="exam-card">
+            <view class="exam-date">{{currentCustomer.latestExam.date}}</view>
+            <view class="exam-data">
+              <text>右眼: {{currentCustomer.latestExam.rightEye}}</text>
+              <text>左眼: {{currentCustomer.latestExam.leftEye}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

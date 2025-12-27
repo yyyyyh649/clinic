@@ -1,0 +1,130 @@
+<!-- pages/staff/scanner/scanner.wxml -->
+<view class="scanner-container">
+  <!-- 扫码区域 -->
+  <view class="scan-section">
+    <camera 
+      class="camera" 
+      device-position="back" 
+      flash="off" 
+      binderror="onCameraError"
+      wx:if="{{showCamera}}"
+    >
+      <cover-view class="scan-frame">
+        <cover-view class="corner top-left"></cover-view>
+        <cover-view class="corner top-right"></cover-view>
+        <cover-view class="corner bottom-left"></cover-view>
+        <cover-view class="corner bottom-right"></cover-view>
+      </cover-view>
+      <cover-view class="scan-tip">将客户二维码放入框内扫描</cover-view>
+    </camera>
+    
+    <view class="camera-placeholder" wx:else>
+      <text class="placeholder-icon">📷</text>
+      <text class="placeholder-text">相机未授权</text>
+      <button class="auth-btn" bindtap="requestCameraAuth">授权相机</button>
+    </view>
+  </view>
+
+  <!-- 扫码按钮 -->
+  <view class="action-section">
+    <button class="scan-btn" bindtap="startScan">
+      <text class="scan-icon">📱</text>
+      <text>扫描二维码</text>
+    </button>
+  </view>
+
+  <!-- 扫码结果 -->
+  <view class="result-section" wx:if="{{scanResult}}">
+    <view class="result-card">
+      <view class="result-header">
+        <text class="result-title">扫码结果</text>
+        <view class="close-btn" bindtap="clearResult">×</view>
+      </view>
+      
+      <!-- 客户信息 -->
+      <view class="customer-info">
+        <view class="info-row">
+          <text class="info-label">客户姓名</text>
+          <text class="info-value">{{scanResult.customerName}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">手机号</text>
+          <text class="info-value">{{scanResult.phone}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">会员余额</text>
+          <text class="info-value balance">¥{{scanResult.balance}}</text>
+        </view>
+      </view>
+
+      <!-- 可用奖品 -->
+      <view class="prizes-section" wx:if="{{scanResult.prizes.length > 0}}">
+        <text class="section-label">可用奖品</text>
+        <view class="prize-list">
+          <view class="prize-item {{item.selected ? 'selected' : ''}}" 
+                wx:for="{{scanResult.prizes}}" wx:key="_id"
+                bindtap="togglePrize" data-index="{{index}}">
+            <view class="prize-check">{{item.selected ? '✓' : ''}}</view>
+            <text class="prize-icon">{{item.icon}}</text>
+            <text class="prize-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 扣除金额 -->
+      <view class="deduct-section">
+        <text class="section-label">扣除金额</text>
+        <view class="amount-input-wrapper">
+          <text class="currency">¥</text>
+          <input 
+            class="amount-input" 
+            type="digit" 
+            placeholder="请输入金额" 
+            bindinput="onAmountInput"
+            value="{{deductAmount}}"
+          />
+        </view>
+        <view class="amount-tips">
+          <text>可扣余额：¥{{scanResult.balance}}</text>
+        </view>
+      </view>
+
+      <!-- 消费备注 -->
+      <view class="remark-section">
+        <text class="section-label">消费备注</text>
+        <input 
+          class="remark-input" 
+          type="text" 
+          placeholder="请输入消费说明（选填）" 
+          bindinput="onRemarkInput"
+          value="{{remark}}"
+        />
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="action-buttons">
+        <button class="cancel-btn" bindtap="clearResult">取消</button>
+        <button class="confirm-btn" bindtap="confirmVerify">确认核销</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作记录 -->
+  <view class="history-section" wx:if="{{recentRecords.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">最近操作</text>
+    </view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{recentRecords}}" wx:key="_id">
+        <view class="history-info">
+          <text class="history-customer">{{item.customerName}}</text>
+          <text class="history-desc">{{item.description}}</text>
+        </view>
+        <view class="history-meta">
+          <text class="history-amount">{{item.amount ? '-¥' + item.amount : ''}}</text>
+          <text class="history-time">{{item.time}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

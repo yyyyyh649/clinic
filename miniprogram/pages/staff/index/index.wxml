@@ -1,0 +1,124 @@
+<!-- pages/staff/index/index.wxml -->
+<view class="staff-index-container">
+  <!-- 顶部信息 -->
+  <view class="header-section">
+    <view class="staff-info">
+      <view class="avatar">👤</view>
+      <view class="info-text">
+        <text class="staff-name">{{staffInfo.name || '店员'}}</text>
+        <text class="staff-role">{{staffInfo.role === 'admin' ? '管理员' : '验光师'}}</text>
+      </view>
+    </view>
+    <view class="header-actions">
+      <view class="action-btn" bindtap="goToAdminPanel" wx:if="{{staffInfo.role === 'admin'}}">
+        <text>管理后台</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 本月统计 -->
+  <view class="stats-section card">
+    <view class="section-header">
+      <text class="section-title">📊 本月业绩</text>
+      <text class="month-text">{{currentMonth}}</text>
+    </view>
+    <view class="stats-grid">
+      <view class="stat-item" bindtap="showRevenueDetail">
+        <text class="stat-value">¥{{monthlyStats.totalRevenue}}</text>
+        <text class="stat-label">营业额</text>
+      </view>
+      <view class="stat-item" bindtap="showRechargeDetail">
+        <text class="stat-value">¥{{monthlyStats.totalRecharge}}</text>
+        <text class="stat-label">充值金额</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{monthlyStats.customerCount}}</text>
+        <text class="stat-label">服务客户</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{monthlyStats.examCount}}</text>
+        <text class="stat-label">验光次数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷功能 -->
+  <view class="quick-actions card">
+    <view class="section-header">
+      <text class="section-title">⚡ 快捷功能</text>
+    </view>
+    <view class="actions-grid">
+      <view class="action-item" bindtap="goToScanner">
+        <view class="action-icon scan-icon">📷</view>
+        <text class="action-name">扫码核销</text>
+      </view>
+      <view class="action-item" bindtap="goToCustomerSearch">
+        <view class="action-icon search-icon">🔍</view>
+        <text class="action-name">客户搜索</text>
+      </view>
+      <view class="action-item" bindtap="goToAddExam">
+        <view class="action-icon exam-icon">📋</view>
+        <text class="action-name">添加验光</text>
+      </view>
+      <view class="action-item" bindtap="goToRecharge">
+        <view class="action-icon recharge-icon">💰</view>
+        <text class="action-name">客户充值</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 客户跟进提醒 -->
+  <view class="follow-up-section card">
+    <view class="section-header">
+      <text class="section-title">⏰ 待跟进客户</text>
+      <text class="view-all" bindtap="viewAllCustomers">查看全部 ></text>
+    </view>
+    <view class="customer-list" wx:if="{{followUpCustomers.length > 0}}">
+      <view class="customer-item" wx:for="{{followUpCustomers}}" wx:key="_id" bindtap="viewCustomerDetail" data-id="{{item._id}}">
+        <view class="customer-info">
+          <text class="customer-name">{{item.name}}</text>
+          <text class="customer-phone">{{item.phone}}</text>
+        </view>
+        <view class="last-exam">
+          <text class="days-text {{item.daysAgo >= 90 ? 'warning' : ''}}">{{item.daysAgo}}天前验光</text>
+          <view class="contact-btn" catchtap="contactCustomer" data-phone="{{item.phone}}">
+            <text>📞</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-text">暂无待跟进客户</text>
+    </view>
+  </view>
+
+  <!-- 今日业务 -->
+  <view class="today-section card">
+    <view class="section-header">
+      <text class="section-title">📅 今日业务</text>
+    </view>
+    <view class="today-stats">
+      <view class="today-item">
+        <text class="today-label">验光</text>
+        <text class="today-value">{{todayStats.examCount}}次</text>
+      </view>
+      <view class="today-item">
+        <text class="today-label">核销</text>
+        <text class="today-value">{{todayStats.verifyCount}}次</text>
+      </view>
+      <view class="today-item">
+        <text class="today-label">充值</text>
+        <text class="today-value">¥{{todayStats.rechargeAmount}}</text>
+      </view>
+      <view class="today-item">
+        <text class="today-label">消费</text>
+        <text class="today-value">¥{{todayStats.consumeAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <button class="logout-btn" bindtap="handleLogout">退出登录</button>
+  </view>
+</view>

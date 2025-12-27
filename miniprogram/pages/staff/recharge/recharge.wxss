@@ -1,0 +1,302 @@
+/* pages/staff/recharge/recharge.wxss */
+.recharge-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding-bottom: 40rpx;
+}
+
+/* 客户信息 */
+.customer-section {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+}
+
+.customer-card {
+  display: flex;
+  align-items: center;
+}
+
+.customer-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.customer-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.customer-phone {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4rpx;
+}
+
+.current-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.balance-label {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.balance-value {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 4rpx;
+}
+
+/* 搜索客户 */
+.search-section {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx;
+  background: #ffffff;
+}
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 40rpx;
+  padding: 0 30rpx;
+}
+
+.search-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.search-input {
+  flex: 1;
+  height: 80rpx;
+  font-size: 30rpx;
+}
+
+.search-btn {
+  width: 140rpx;
+  height: 80rpx;
+  background: #f39c12;
+  color: #ffffff;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+  padding: 0;
+}
+
+/* 充值表单 */
+.recharge-form {
+  padding: 20rpx;
+}
+
+.packages-section,
+.custom-section,
+.payment-section,
+.remark-section {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-header {
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+/* 充值套餐 */
+.packages-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.package-item {
+  width: calc(50% - 8rpx);
+  padding: 24rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.package-item.selected {
+  background: #fff8e6;
+  border-color: #f39c12;
+}
+
+.package-amount {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.package-gift {
+  font-size: 24rpx;
+  color: #e74c3c;
+  margin-top: 8rpx;
+}
+
+.package-total {
+  font-size: 26rpx;
+  color: #666666;
+  margin-top: 4rpx;
+}
+
+/* 自定义金额 */
+.amount-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+}
+
+.currency {
+  font-size: 40rpx;
+  color: #333333;
+  font-weight: 600;
+}
+
+.amount-input {
+  flex: 1;
+  height: 100rpx;
+  font-size: 40rpx;
+  padding-left: 12rpx;
+}
+
+.amount-tips {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.total-text {
+  color: #e67e22;
+  font-weight: 500;
+}
+
+/* 支付方式 */
+.payment-options {
+  display: flex;
+  gap: 16rpx;
+}
+
+.payment-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+}
+
+.payment-item.selected {
+  background: #e8f4fd;
+  border-color: #3498db;
+}
+
+.payment-icon {
+  font-size: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.payment-name {
+  font-size: 24rpx;
+  color: #333333;
+}
+
+/* 备注 */
+.remark-input {
+  width: 100%;
+  height: 80rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 确认充值 */
+.confirm-section {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 30rpx;
+}
+
+.confirm-summary {
+  margin-bottom: 24rpx;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.summary-row.total {
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 16rpx;
+  margin-top: 8rpx;
+}
+
+.summary-label {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.summary-value {
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.summary-value.gift {
+  color: #e74c3c;
+}
+
+.summary-row.total .summary-value {
+  font-size: 36rpx;
+  color: #e67e22;
+}
+
+.confirm-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: #ffffff;
+  font-size: 34rpx;
+  font-weight: 500;
+  border-radius: 48rpx;
+}

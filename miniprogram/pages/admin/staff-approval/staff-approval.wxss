@@ -1,0 +1,160 @@
+/* pages/admin/staff-approval/staff-approval.wxss */
+.staff-approval-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding: 20rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 10rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.count {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.staff-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.staff-item {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.staff-info {
+  display: flex;
+  align-items: flex-start;
+}
+
+.staff-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.staff-avatar.approved {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.staff-details {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.staff-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.staff-phone {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.staff-id,
+.apply-time {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.staff-actions {
+  display: flex;
+  gap: 20rpx;
+}
+
+.approve-btn,
+.reject-btn {
+  flex: 1;
+  height: 72rpx;
+  font-size: 28rpx;
+  border-radius: 36rpx;
+}
+
+.approve-btn {
+  background: #2ecc71;
+  color: #ffffff;
+}
+
+.reject-btn {
+  background: #f8f9fa;
+  color: #e74c3c;
+  border: 2rpx solid #e74c3c;
+}
+
+.staff-status {
+  margin-left: auto;
+}
+
+.status-tag {
+  font-size: 24rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.status-tag.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 120rpx 60rpx;
+}
+
+.empty-icon {
+  font-size: 100rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 12rpx;
+}
+
+.empty-desc {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 已审核列表 */
+.approved-section {
+  margin-top: 30rpx;
+}
+
+.approved-section .staff-item {
+  flex-direction: row;
+  align-items: center;
+}

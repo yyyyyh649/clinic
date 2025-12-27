@@ -1,0 +1,150 @@
+<!-- pages/records/records.wxml -->
+<view class="records-container">
+  <!-- 标签切换 -->
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === 'exam' ? 'active' : ''}}" bindtap="switchTab" data-tab="exam">
+      <text class="tab-text">验光档案</text>
+      <view class="tab-indicator" wx:if="{{activeTab === 'exam'}}"></view>
+    </view>
+    <view class="tab-item {{activeTab === 'self' ? 'active' : ''}}" bindtap="switchTab" data-tab="self">
+      <text class="tab-text">自测记录</text>
+      <view class="tab-indicator" wx:if="{{activeTab === 'self'}}"></view>
+    </view>
+  </view>
+
+  <!-- 验光档案 -->
+  <view class="exam-records" wx:if="{{activeTab === 'exam'}}">
+    <!-- 最新验光结果 -->
+    <view class="latest-record card" wx:if="{{latestExam}}">
+      <view class="card-header">
+        <text class="card-title">📋 最新验光结果</text>
+        <text class="exam-date">{{latestExam.examDate}}</text>
+      </view>
+      <view class="exam-details">
+        <view class="eye-data">
+          <view class="eye-section">
+            <text class="eye-label">右眼 (OD)</text>
+            <view class="data-row">
+              <view class="data-item">
+                <text class="data-label">球镜</text>
+                <text class="data-value">{{latestExam.rightEye.sphere}}</text>
+              </view>
+              <view class="data-item">
+                <text class="data-label">柱镜</text>
+                <text class="data-value">{{latestExam.rightEye.cylinder}}</text>
+              </view>
+              <view class="data-item">
+                <text class="data-label">轴位</text>
+                <text class="data-value">{{latestExam.rightEye.axis}}°</text>
+              </view>
+            </view>
+          </view>
+          <view class="eye-section">
+            <text class="eye-label">左眼 (OS)</text>
+            <view class="data-row">
+              <view class="data-item">
+                <text class="data-label">球镜</text>
+                <text class="data-value">{{latestExam.leftEye.sphere}}</text>
+              </view>
+              <view class="data-item">
+                <text class="data-label">柱镜</text>
+                <text class="data-value">{{latestExam.leftEye.cylinder}}</text>
+              </view>
+              <view class="data-item">
+                <text class="data-label">轴位</text>
+                <text class="data-value">{{latestExam.leftEye.axis}}°</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="exam-meta">
+          <text class="meta-item">瞳距：{{latestExam.pd}}mm</text>
+          <text class="meta-item">验光师：{{latestExam.optometrist}}</text>
+        </view>
+        <view class="exam-note" wx:if="{{latestExam.note}}">
+          <text class="note-label">备注：</text>
+          <text class="note-text">{{latestExam.note}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 历史记录 -->
+    <view class="history-section" wx:if="{{examHistory.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">历史验光记录</text>
+      </view>
+      <view class="history-list">
+        <view class="history-item card" wx:for="{{examHistory}}" wx:key="_id" bindtap="viewExamDetail" data-id="{{item._id}}">
+          <view class="history-header">
+            <text class="history-date">{{item.examDate}}</text>
+            <text class="history-optometrist">验光师：{{item.optometrist}}</text>
+          </view>
+          <view class="history-brief">
+            <text>右眼: {{item.rightEye.sphere}} / 左眼: {{item.leftEye.sphere}}</text>
+          </view>
+          <view class="view-more">
+            <text>查看详情 ></text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{!latestExam && examHistory.length === 0}}">
+      <text class="empty-icon">📋</text>
+      <text class="empty-title">暂无验光记录</text>
+      <text class="empty-tip">您还没有在店内做过验光检查</text>
+    </view>
+  </view>
+
+  <!-- 自测记录 -->
+  <view class="self-records" wx:if="{{activeTab === 'self'}}">
+    <view class="self-record card" wx:if="{{selfTestRecord}}">
+      <view class="card-header">
+        <text class="card-title">👁️ 最近一次自测结果</text>
+        <text class="test-date">{{selfTestRecord.testDate}}</text>
+      </view>
+      <view class="self-details">
+        <view class="result-item">
+          <text class="result-label">测试眼睛</text>
+          <text class="result-value">{{selfTestRecord.eyeText}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">视力等级</text>
+          <text class="result-value highlight">{{selfTestRecord.visionLevel}}</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">正确率</text>
+          <text class="result-value">{{selfTestRecord.correctRate}}%</text>
+        </view>
+        <view class="result-item">
+          <text class="result-label">测试用时</text>
+          <text class="result-value">{{selfTestRecord.testTime}}</text>
+        </view>
+      </view>
+      <view class="test-tip">
+        <text>* 自测结果仅供参考，建议定期到店进行专业验光</text>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{!selfTestRecord}}">
+      <text class="empty-icon">👁️</text>
+      <text class="empty-title">暂无自测记录</text>
+      <text class="empty-tip">快去首页进行视力测试吧</text>
+      <button class="action-btn" bindtap="goToVisionTest">开始测试</button>
+    </view>
+
+    <!-- 温馨提示 -->
+    <view class="tips-card card" wx:if="{{selfTestRecord}}">
+      <view class="card-header">
+        <text class="card-title">💡 温馨提示</text>
+      </view>
+      <view class="tips-content">
+        <text class="tip-item">• 建议每隔3-6个月进行一次专业验光</text>
+        <text class="tip-item">• 如发现视力变化明显，请及时就医</text>
+        <text class="tip-item">• 注意用眼卫生，避免长时间使用电子设备</text>
+      </view>
+    </view>
+  </view>
+</view>

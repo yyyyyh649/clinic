@@ -1,0 +1,94 @@
+<!-- pages/qrcode/qrcode.wxml -->
+<view class="qrcode-container">
+  <!-- 密码输入页面 -->
+  <view class="password-section" wx:if="{{!isUnlocked}}">
+    <view class="lock-icon">🔒</view>
+    <text class="lock-title">请输入密码</text>
+    <text class="lock-desc">输入您设置的支付密码以显示付款码</text>
+    
+    <view class="password-input-area">
+      <view class="password-dots">
+        <view class="dot {{password.length >= 1 ? 'filled' : ''}}"></view>
+        <view class="dot {{password.length >= 2 ? 'filled' : ''}}"></view>
+        <view class="dot {{password.length >= 3 ? 'filled' : ''}}"></view>
+        <view class="dot {{password.length >= 4 ? 'filled' : ''}}"></view>
+        <view class="dot {{password.length >= 5 ? 'filled' : ''}}"></view>
+        <view class="dot {{password.length >= 6 ? 'filled' : ''}}"></view>
+      </view>
+      <input 
+        class="hidden-input" 
+        type="number" 
+        password
+        maxlength="6"
+        focus="{{true}}"
+        bindinput="onPasswordInput"
+        value="{{password}}"
+      />
+    </view>
+
+    <view class="password-actions">
+      <text class="forgot-password" bindtap="forgotPassword">忘记密码？</text>
+    </view>
+
+    <view class="password-tip" wx:if="{{!hasSetPassword}}">
+      <text>您还未设置支付密码，</text>
+      <text class="set-password-link" bindtap="setPassword">点击设置</text>
+    </view>
+  </view>
+
+  <!-- 二维码显示页面 -->
+  <view class="qrcode-section" wx:if="{{isUnlocked}}">
+    <view class="qrcode-card">
+      <view class="card-header">
+        <text class="card-title">💳 付款码</text>
+        <text class="refresh-time">{{refreshCountdown}}s后刷新</text>
+      </view>
+      
+      <view class="qrcode-display">
+        <canvas canvas-id="qrcode" class="qrcode-canvas"></canvas>
+        <view class="qrcode-loading" wx:if="{{isGenerating}}">
+          <text>生成中...</text>
+        </view>
+      </view>
+
+      <view class="user-info-display">
+        <text class="user-name">{{userInfo.nickName || '用户'}}</text>
+        <text class="user-balance">可用余额：¥{{balance}}</text>
+      </view>
+
+      <view class="usage-tip">
+        <text>请将此码展示给店员扫描</text>
+      </view>
+    </view>
+
+    <!-- 可用奖品列表 -->
+    <view class="prizes-card" wx:if="{{availablePrizes.length > 0}}">
+      <view class="card-header">
+        <text class="card-title">🎁 可用奖品</text>
+      </view>
+      <view class="prize-list">
+        <view class="prize-item" wx:for="{{availablePrizes}}" wx:key="_id">
+          <view class="prize-info">
+            <text class="prize-icon">{{item.icon}}</text>
+            <text class="prize-name">{{item.name}}</text>
+          </view>
+          <text class="prize-expire">{{item.expireDays}}天后过期</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 安全提示 -->
+    <view class="security-tips">
+      <view class="tip-item">
+        <text class="tip-icon">⚠️</text>
+        <text class="tip-text">二维码每5分钟自动刷新，请勿截图保存</text>
+      </view>
+      <view class="tip-item">
+        <text class="tip-icon">🔐</text>
+        <text class="tip-text">请勿将付款码出示给非店员人员</text>
+      </view>
+    </view>
+
+    <button class="lock-btn" bindtap="lockQRCode">锁定付款码</button>
+  </view>
+</view>

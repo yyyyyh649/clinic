@@ -1,0 +1,112 @@
+<!-- pages/index/index.wxml -->
+<view class="index-container">
+  <!-- 顶部用户信息 -->
+  <view class="header-section">
+    <view class="user-info" wx:if="{{userInfo}}">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-text">
+        <text class="greeting">您好，{{userInfo.nickName || '用户'}}</text>
+        <text class="points">积分：{{points || 0}}</text>
+      </view>
+    </view>
+    <view class="user-info" wx:else bindtap="goToLogin">
+      <view class="avatar-placeholder">👤</view>
+      <text class="login-tip">点击登录</text>
+    </view>
+  </view>
+
+  <!-- 功能入口区 -->
+  <view class="feature-section">
+    <view class="section-title">快捷功能</view>
+    <view class="feature-grid">
+      <view class="feature-item" bindtap="goToVisionTest">
+        <view class="feature-icon vision-icon">👁️</view>
+        <text class="feature-name">视力测试</text>
+        <text class="feature-desc">E视力表自测</text>
+      </view>
+      <view class="feature-item" bindtap="goToLottery">
+        <view class="feature-icon lottery-icon">🎁</view>
+        <text class="feature-name">每日抽奖</text>
+        <text class="feature-desc">{{hasDrawnToday ? '今日已抽' : '今日可抽'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 会员卡区域 -->
+  <view class="card-section" bindtap="goToProfile">
+    <view class="member-card">
+      <view class="card-header">
+        <text class="card-title">💳 会员卡</text>
+        <text class="card-level">{{userInfo.memberLevel || '普通会员'}}</text>
+      </view>
+      <view class="card-body">
+        <view class="balance-info">
+          <text class="balance-label">余额</text>
+          <text class="balance-value">¥{{balance || '0.00'}}</text>
+        </view>
+        <view class="card-action">
+          <text class="action-text">查看详情 ></text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 我的奖品 -->
+  <view class="prizes-section" wx:if="{{myPrizes.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">我的奖品</text>
+      <text class="more-link" bindtap="goToProfile">查看全部 ></text>
+    </view>
+    <scroll-view class="prizes-scroll" scroll-x>
+      <view class="prize-item" wx:for="{{myPrizes}}" wx:key="_id">
+        <view class="prize-icon">{{item.icon}}</view>
+        <text class="prize-name">{{item.name}}</text>
+        <text class="prize-expire">{{item.expireDays}}天后过期</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 店铺活动/文章区域 -->
+  <view class="articles-section">
+    <view class="section-header">
+      <text class="section-title">店铺动态</text>
+      <text class="more-link">更多 ></text>
+    </view>
+    <view class="article-list">
+      <view class="article-item" wx:for="{{articles}}" wx:key="id" bindtap="viewArticle" data-id="{{item.id}}">
+        <image class="article-cover" src="{{item.coverUrl}}" mode="aspectFill"></image>
+        <view class="article-info">
+          <text class="article-title">{{item.title}}</text>
+          <text class="article-summary">{{item.summary}}</text>
+          <text class="article-date">{{item.date}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 服务介绍 -->
+  <view class="services-section">
+    <view class="section-title">我们的服务</view>
+    <view class="services-grid">
+      <view class="service-item">
+        <text class="service-icon">🔬</text>
+        <text class="service-name">专业验光</text>
+      </view>
+      <view class="service-item">
+        <text class="service-icon">🧹</text>
+        <text class="service-name">免费清洗</text>
+      </view>
+      <view class="service-item">
+        <text class="service-icon">🔧</text>
+        <text class="service-name">镜架调整</text>
+      </view>
+      <view class="service-item">
+        <text class="service-icon">📞</text>
+        <text class="service-name">咨询服务</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部留白 -->
+  <view class="bottom-space"></view>
+</view>

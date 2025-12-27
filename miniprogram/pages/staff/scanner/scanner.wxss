@@ -1,0 +1,394 @@
+/* pages/staff/scanner/scanner.wxss */
+.scanner-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+/* 扫码区域 */
+.scan-section {
+  height: 500rpx;
+  position: relative;
+}
+
+.camera {
+  width: 100%;
+  height: 100%;
+}
+
+.scan-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400rpx;
+  height: 400rpx;
+}
+
+.corner {
+  position: absolute;
+  width: 40rpx;
+  height: 40rpx;
+  border-color: #4A90D9;
+  border-style: solid;
+}
+
+.top-left {
+  top: 0;
+  left: 0;
+  border-width: 6rpx 0 0 6rpx;
+}
+
+.top-right {
+  top: 0;
+  right: 0;
+  border-width: 6rpx 6rpx 0 0;
+}
+
+.bottom-left {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 6rpx 6rpx;
+}
+
+.bottom-right {
+  bottom: 0;
+  right: 0;
+  border-width: 0 6rpx 6rpx 0;
+}
+
+.scan-tip {
+  position: absolute;
+  bottom: 30rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+  font-size: 26rpx;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 12rpx 30rpx;
+  border-radius: 20rpx;
+}
+
+.camera-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.placeholder-text {
+  color: #ffffff;
+  font-size: 28rpx;
+  margin-bottom: 30rpx;
+}
+
+.auth-btn {
+  background: #4A90D9;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 16rpx 48rpx;
+  border-radius: 30rpx;
+}
+
+/* 扫码按钮 */
+.action-section {
+  padding: 30rpx;
+}
+
+.scan-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: #ffffff;
+  font-size: 34rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+}
+
+.scan-icon {
+  font-size: 40rpx;
+}
+
+/* 扫码结果 */
+.result-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-end;
+  z-index: 100;
+}
+
+.result-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 40rpx 40rpx 0 0;
+  padding: 40rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.result-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.close-btn {
+  width: 60rpx;
+  height: 60rpx;
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #999999;
+}
+
+/* 客户信息 */
+.customer-info {
+  background: #f8f9fa;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.info-value.balance {
+  color: #e74c3c;
+  font-size: 32rpx;
+}
+
+/* 奖品选择 */
+.prizes-section,
+.deduct-section,
+.remark-section {
+  margin-bottom: 24rpx;
+}
+
+.section-label {
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.prize-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.prize-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 12rpx;
+  gap: 12rpx;
+}
+
+.prize-item.selected {
+  background: #e8f4fd;
+  border-color: #4A90D9;
+}
+
+.prize-check {
+  width: 40rpx;
+  height: 40rpx;
+  background: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 24rpx;
+}
+
+.prize-item.selected .prize-check {
+  background: #4A90D9;
+}
+
+.prize-icon {
+  font-size: 32rpx;
+}
+
+.prize-name {
+  font-size: 26rpx;
+  color: #333333;
+}
+
+/* 金额输入 */
+.amount-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+}
+
+.currency {
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.amount-input {
+  flex: 1;
+  height: 88rpx;
+  font-size: 36rpx;
+  padding-left: 12rpx;
+}
+
+.amount-tips {
+  margin-top: 12rpx;
+}
+
+.amount-tips text {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* 备注输入 */
+.remark-input {
+  width: 100%;
+  height: 88rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 30rpx;
+}
+
+.cancel-btn,
+.confirm-btn {
+  flex: 1;
+  height: 88rpx;
+  font-size: 30rpx;
+  border-radius: 44rpx;
+}
+
+.cancel-btn {
+  background: #f8f9fa;
+  color: #666666;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: #ffffff;
+}
+
+/* 操作记录 */
+.history-section {
+  background: #ffffff;
+  margin: 20rpx;
+  border-radius: 24rpx;
+  padding: 30rpx;
+}
+
+.section-header {
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-customer {
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.history-desc {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 4rpx;
+}
+
+.history-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.history-amount {
+  font-size: 28rpx;
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.history-time {
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 4rpx;
+}

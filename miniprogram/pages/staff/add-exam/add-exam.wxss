@@ -1,0 +1,174 @@
+/* pages/staff/add-exam/add-exam.wxss */
+.add-exam-container {
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding-bottom: 40rpx;
+}
+
+/* 客户信息 */
+.customer-section {
+  padding: 30rpx;
+  background: #ffffff;
+}
+
+.customer-card {
+  display: flex;
+  align-items: center;
+}
+
+.customer-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.customer-info {
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.customer-phone {
+  font-size: 26rpx;
+  color: #999999;
+  margin-top: 4rpx;
+}
+
+/* 搜索客户 */
+.search-section {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx;
+  background: #ffffff;
+}
+
+.search-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 40rpx;
+  padding: 0 30rpx;
+}
+
+.search-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.search-input {
+  flex: 1;
+  height: 80rpx;
+  font-size: 30rpx;
+}
+
+.search-btn {
+  width: 140rpx;
+  height: 80rpx;
+  background: #3498db;
+  color: #ffffff;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+  padding: 0;
+}
+
+/* 验光表单 */
+.exam-form {
+  padding: 20rpx;
+}
+
+.eye-section,
+.other-section,
+.note-section {
+  background: #ffffff;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-header {
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.form-item {
+  width: calc(50% - 10rpx);
+}
+
+.form-item.half {
+  width: calc(50% - 10rpx);
+}
+
+.form-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.label {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.input-field {
+  width: 100%;
+  height: 80rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.note-textarea {
+  width: 100%;
+  height: 160rpx;
+  background: #f8f9fa;
+  border: 2rpx solid #e9ecef;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 提交按钮 */
+.submit-section {
+  padding: 0 20rpx;
+  margin-top: 30rpx;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: #ffffff;
+  font-size: 34rpx;
+  font-weight: 500;
+  border-radius: 48rpx;
+}

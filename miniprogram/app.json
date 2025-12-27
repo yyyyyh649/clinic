@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/vision-test/vision-test",
+    "pages/lottery/lottery",
+    "pages/records/records",
+    "pages/profile/profile",
+    "pages/qrcode/qrcode",
+    "pages/staff/login/login",
+    "pages/staff/index/index",
+    "pages/staff/scanner/scanner",
+    "pages/staff/customer-search/customer-search",
+    "pages/staff/add-exam/add-exam",
+    "pages/staff/recharge/recharge",
+    "pages/admin/index/index",
+    "pages/admin/staff-approval/staff-approval",
+    "pages/admin/customer-management/customer-management"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4A90D9",
+    "navigationBarTitleText": "明亮眼镜店",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4A90D9",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "text": "档案",
+        "iconPath": "images/records.png",
+        "selectedIconPath": "images/records-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/profile.png",
+        "selectedIconPath": "images/profile-active.png"
+      }
+    ]
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

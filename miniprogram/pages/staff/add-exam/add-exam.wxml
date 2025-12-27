@@ -1,0 +1,178 @@
+<!-- pages/staff/add-exam/add-exam.wxml -->
+<view class="add-exam-container">
+  <!-- 客户信息 -->
+  <view class="customer-section" wx:if="{{customer}}">
+    <view class="customer-card">
+      <view class="customer-avatar">{{customer.name ? customer.name[0] : '客'}}</view>
+      <view class="customer-info">
+        <text class="customer-name">{{customer.name || '未设置姓名'}}</text>
+        <text class="customer-phone">{{customer.phone}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索客户 -->
+  <view class="search-section" wx:if="{{!customer}}">
+    <view class="search-bar">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        type="number" 
+        maxlength="11"
+        placeholder="输入手机号搜索客户" 
+        bindinput="onPhoneInput"
+        bindconfirm="searchCustomer"
+        value="{{searchPhone}}"
+      />
+    </view>
+    <button class="search-btn" bindtap="searchCustomer">搜索</button>
+  </view>
+
+  <!-- 验光数据表单 -->
+  <view class="exam-form" wx:if="{{customer}}">
+    <!-- 右眼数据 -->
+    <view class="eye-section">
+      <view class="section-header">
+        <text class="section-title">👁️ 右眼 (OD)</text>
+      </view>
+      <view class="form-grid">
+        <view class="form-item">
+          <text class="label">球镜 (SPH)</text>
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="如 -3.00"
+            bindinput="onRightSphereInput"
+            value="{{examData.rightEye.sphere}}"
+          />
+        </view>
+        <view class="form-item">
+          <text class="label">柱镜 (CYL)</text>
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="如 -0.75"
+            bindinput="onRightCylinderInput"
+            value="{{examData.rightEye.cylinder}}"
+          />
+        </view>
+        <view class="form-item">
+          <text class="label">轴位 (AXIS)</text>
+          <input 
+            class="input-field" 
+            type="number" 
+            placeholder="如 180"
+            bindinput="onRightAxisInput"
+            value="{{examData.rightEye.axis}}"
+          />
+        </view>
+        <view class="form-item">
+          <text class="label">矫正视力</text>
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="如 1.0"
+            bindinput="onRightVAInput"
+            value="{{examData.rightEye.va}}"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 左眼数据 -->
+    <view class="eye-section">
+      <view class="section-header">
+        <text class="section-title">👁️ 左眼 (OS)</text>
+      </view>
+      <view class="form-grid">
+        <view class="form-item">
+          <text class="label">球镜 (SPH)</text>
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="如 -2.75"
+            bindinput="onLeftSphereInput"
+            value="{{examData.leftEye.sphere}}"
+          />
+        </view>
+        <view class="form-item">
+          <text class="label">柱镜 (CYL)</text>
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="如 -0.50"
+            bindinput="onLeftCylinderInput"
+            value="{{examData.leftEye.cylinder}}"
+          />
+        </view>
+        <view class="form-item">
+          <text class="label">轴位 (AXIS)</text>
+          <input 
+            class="input-field" 
+            type="number" 
+            placeholder="如 90"
+            bindinput="onLeftAxisInput"
+            value="{{examData.leftEye.axis}}"
+          />
+        </view>
+        <view class="form-item">
+          <text class="label">矫正视力</text>
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="如 1.0"
+            bindinput="onLeftVAInput"
+            value="{{examData.leftEye.va}}"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 其他数据 -->
+    <view class="other-section">
+      <view class="section-header">
+        <text class="section-title">📏 其他参数</text>
+      </view>
+      <view class="form-row">
+        <view class="form-item half">
+          <text class="label">瞳距 (PD)</text>
+          <input 
+            class="input-field" 
+            type="digit" 
+            placeholder="如 62"
+            bindinput="onPDInput"
+            value="{{examData.pd}}"
+          />
+        </view>
+        <view class="form-item half">
+          <text class="label">ADD (老花)</text>
+          <input 
+            class="input-field" 
+            type="text" 
+            placeholder="如 +1.50"
+            bindinput="onAddInput"
+            value="{{examData.add}}"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="note-section">
+      <view class="section-header">
+        <text class="section-title">📝 备注</text>
+      </view>
+      <textarea 
+        class="note-textarea" 
+        placeholder="请输入验光备注（选填）"
+        bindinput="onNoteInput"
+        value="{{examData.note}}"
+      ></textarea>
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-section">
+      <button class="submit-btn" bindtap="submitExam">保存验光记录</button>
+    </view>
+  </view>
+</view>

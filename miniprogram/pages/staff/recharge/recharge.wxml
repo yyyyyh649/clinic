@@ -1,0 +1,138 @@
+<!-- pages/staff/recharge/recharge.wxml -->
+<view class="recharge-container">
+  <!-- 客户信息 -->
+  <view class="customer-section" wx:if="{{customer}}">
+    <view class="customer-card">
+      <view class="customer-avatar">{{customer.name ? customer.name[0] : '客'}}</view>
+      <view class="customer-info">
+        <text class="customer-name">{{customer.name || '未设置姓名'}}</text>
+        <text class="customer-phone">{{customer.phone}}</text>
+      </view>
+      <view class="current-balance">
+        <text class="balance-label">当前余额</text>
+        <text class="balance-value">¥{{customer.balance}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索客户 -->
+  <view class="search-section" wx:if="{{!customer}}">
+    <view class="search-bar">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        type="number" 
+        maxlength="11"
+        placeholder="输入手机号搜索客户" 
+        bindinput="onPhoneInput"
+        bindconfirm="searchCustomer"
+        value="{{searchPhone}}"
+      />
+    </view>
+    <button class="search-btn" bindtap="searchCustomer">搜索</button>
+  </view>
+
+  <!-- 充值表单 -->
+  <view class="recharge-form" wx:if="{{customer}}">
+    <!-- 充值套餐 -->
+    <view class="packages-section">
+      <view class="section-header">
+        <text class="section-title">💎 充值套餐</text>
+      </view>
+      <view class="packages-grid">
+        <view class="package-item {{selectedPackage === index ? 'selected' : ''}}" 
+              wx:for="{{packages}}" wx:key="id"
+              bindtap="selectPackage" data-index="{{index}}">
+          <text class="package-amount">¥{{item.amount}}</text>
+          <text class="package-gift" wx:if="{{item.gift > 0}}">送¥{{item.gift}}</text>
+          <text class="package-total">到账¥{{item.total}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 自定义金额 -->
+    <view class="custom-section">
+      <view class="section-header">
+        <text class="section-title">💰 自定义金额</text>
+      </view>
+      <view class="amount-input-wrapper">
+        <text class="currency">¥</text>
+        <input 
+          class="amount-input" 
+          type="digit" 
+          placeholder="请输入充值金额" 
+          bindinput="onAmountInput"
+          bindfocus="onAmountFocus"
+          value="{{customAmount}}"
+        />
+      </view>
+      <view class="amount-tips">
+        <text>充值金额：¥{{rechargeAmount}}</text>
+        <text wx:if="{{giftAmount > 0}}"> + 赠送：¥{{giftAmount}}</text>
+        <text class="total-text"> = 到账：¥{{totalAmount}}</text>
+      </view>
+    </view>
+
+    <!-- 收款方式 -->
+    <view class="payment-section">
+      <view class="section-header">
+        <text class="section-title">💳 收款方式</text>
+      </view>
+      <view class="payment-options">
+        <view class="payment-item {{paymentMethod === 'cash' ? 'selected' : ''}}" 
+              bindtap="selectPayment" data-method="cash">
+          <text class="payment-icon">💵</text>
+          <text class="payment-name">现金</text>
+        </view>
+        <view class="payment-item {{paymentMethod === 'wechat' ? 'selected' : ''}}" 
+              bindtap="selectPayment" data-method="wechat">
+          <text class="payment-icon">💬</text>
+          <text class="payment-name">微信</text>
+        </view>
+        <view class="payment-item {{paymentMethod === 'alipay' ? 'selected' : ''}}" 
+              bindtap="selectPayment" data-method="alipay">
+          <text class="payment-icon">📱</text>
+          <text class="payment-name">支付宝</text>
+        </view>
+        <view class="payment-item {{paymentMethod === 'card' ? 'selected' : ''}}" 
+              bindtap="selectPayment" data-method="card">
+          <text class="payment-icon">💳</text>
+          <text class="payment-name">刷卡</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="remark-section">
+      <view class="section-header">
+        <text class="section-title">📝 备注</text>
+      </view>
+      <input 
+        class="remark-input" 
+        type="text" 
+        placeholder="请输入备注信息（选填）"
+        bindinput="onRemarkInput"
+        value="{{remark}}"
+      />
+    </view>
+
+    <!-- 充值确认 -->
+    <view class="confirm-section">
+      <view class="confirm-summary">
+        <view class="summary-row">
+          <text class="summary-label">充值金额</text>
+          <text class="summary-value">¥{{rechargeAmount}}</text>
+        </view>
+        <view class="summary-row" wx:if="{{giftAmount > 0}}">
+          <text class="summary-label">赠送金额</text>
+          <text class="summary-value gift">+¥{{giftAmount}}</text>
+        </view>
+        <view class="summary-row total">
+          <text class="summary-label">到账金额</text>
+          <text class="summary-value">¥{{totalAmount}}</text>
+        </view>
+      </view>
+      <button class="confirm-btn" bindtap="confirmRecharge">确认充值</button>
+    </view>
+  </view>
+</view>

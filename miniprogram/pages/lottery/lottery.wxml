@@ -1,0 +1,93 @@
+<!-- pages/lottery/lottery.wxml -->
+<view class="lottery-container">
+  <!-- 顶部装饰 -->
+  <view class="header-bg">
+    <view class="header-title">🎁 每日幸运抽奖</view>
+    <view class="header-subtitle">每天一次抽奖机会，好礼等你来拿！</view>
+  </view>
+
+  <!-- 奖品展示 -->
+  <view class="prizes-display">
+    <view class="prize-box {{selectedIndex === index ? 'selected' : ''}} {{isDrawing && highlightIndex === index ? 'highlight' : ''}}" 
+          wx:for="{{prizes}}" wx:key="id" wx:for-index="index">
+      <view class="prize-icon">{{item.icon}}</view>
+      <text class="prize-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 抽奖按钮 -->
+  <view class="draw-section">
+    <button class="draw-btn {{hasDrawnToday || isDrawing ? 'disabled' : ''}}" 
+            disabled="{{hasDrawnToday || isDrawing}}"
+            bindtap="startDraw">
+      <text wx:if="{{isDrawing}}">抽奖中...</text>
+      <text wx:elif="{{hasDrawnToday}}">今日已抽奖</text>
+      <text wx:else>立即抽奖</text>
+    </button>
+    <text class="draw-tip">每天可抽奖1次，奖品3日内有效</text>
+  </view>
+
+  <!-- 中奖结果弹窗 -->
+  <view class="result-modal" wx:if="{{showResult}}" bindtap="closeResult">
+    <view class="result-content" catchtap="">
+      <view class="result-icon">🎉</view>
+      <text class="result-title">恭喜您获得</text>
+      <view class="result-prize">
+        <text class="prize-icon-large">{{resultPrize.icon}}</text>
+        <text class="prize-name-large">{{resultPrize.name}}</text>
+      </view>
+      <text class="result-expire">有效期至：{{resultPrize.expireDate}}</text>
+      <text class="result-tip">请在有效期内到店使用</text>
+      <button class="confirm-btn" bindtap="closeResult">我知道了</button>
+    </view>
+  </view>
+
+  <!-- 我的奖品列表 -->
+  <view class="my-prizes-section">
+    <view class="section-header">
+      <text class="section-title">我的奖品</text>
+      <text class="prize-count">共 {{myPrizes.length}} 个</text>
+    </view>
+    
+    <view class="prizes-list" wx:if="{{myPrizes.length > 0}}">
+      <view class="prize-item {{item.isUsed ? 'used' : ''}} {{item.isExpired ? 'expired' : ''}}" 
+            wx:for="{{myPrizes}}" wx:key="_id">
+        <view class="prize-left">
+          <view class="prize-item-icon">{{item.icon}}</view>
+          <view class="prize-info">
+            <text class="prize-item-name">{{item.name}}</text>
+            <text class="prize-expire-date">
+              <block wx:if="{{item.isUsed}}">已使用</block>
+              <block wx:elif="{{item.isExpired}}">已过期</block>
+              <block wx:else>{{item.expireDays}}天后过期</block>
+            </text>
+          </view>
+        </view>
+        <view class="prize-status">
+          <text class="status-tag {{item.isUsed ? 'used' : item.isExpired ? 'expired' : 'valid'}}">
+            {{item.isUsed ? '已使用' : item.isExpired ? '已过期' : '待使用'}}
+          </text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">🎁</text>
+      <text class="empty-text">暂无奖品，快去抽奖吧！</text>
+    </view>
+  </view>
+
+  <!-- 活动规则 -->
+  <view class="rules-section">
+    <view class="section-header">
+      <text class="section-title">活动规则</text>
+    </view>
+    <view class="rules-content">
+      <view class="rule-item">1. 每位用户每天有1次免费抽奖机会</view>
+      <view class="rule-item">2. 中奖后奖品有效期为3天</view>
+      <view class="rule-item">3. 奖品请在有效期内到店使用</view>
+      <view class="rule-item">4. 使用奖品时请出示二维码给店员扫描</view>
+      <view class="rule-item">5. 本活动最终解释权归明亮眼镜店所有</view>
+    </view>
+  </view>
+</view>

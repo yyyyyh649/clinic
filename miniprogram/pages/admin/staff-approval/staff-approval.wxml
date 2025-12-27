@@ -1,0 +1,56 @@
+<!-- pages/admin/staff-approval/staff-approval.wxml -->
+<view class="staff-approval-container">
+  <!-- 待审核列表 -->
+  <view class="pending-section" wx:if="{{pendingStaff.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">待审核店员</text>
+      <text class="count">{{pendingStaff.length}} 位</text>
+    </view>
+    <view class="staff-list">
+      <view class="staff-item" wx:for="{{pendingStaff}}" wx:key="_id">
+        <view class="staff-info">
+          <view class="staff-avatar">{{item.name ? item.name[0] : '员'}}</view>
+          <view class="staff-details">
+            <text class="staff-name">{{item.name}}</text>
+            <text class="staff-phone">{{item.phone}}</text>
+            <text class="staff-id">工号: {{item.staffId}}</text>
+            <text class="apply-time">申请时间: {{item.applyTime}}</text>
+          </view>
+        </view>
+        <view class="staff-actions">
+          <button class="approve-btn" catchtap="approveStaff" data-id="{{item._id}}">通过</button>
+          <button class="reject-btn" catchtap="rejectStaff" data-id="{{item._id}}">拒绝</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{pendingStaff.length === 0 && !isLoading}}">
+    <text class="empty-icon">✅</text>
+    <text class="empty-title">暂无待审核店员</text>
+    <text class="empty-desc">所有店员申请已处理完毕</text>
+  </view>
+
+  <!-- 已审核列表 -->
+  <view class="approved-section" wx:if="{{approvedStaff.length > 0}}">
+    <view class="section-header">
+      <text class="section-title">已通过店员</text>
+      <text class="count">{{approvedStaff.length}} 位</text>
+    </view>
+    <view class="staff-list approved">
+      <view class="staff-item" wx:for="{{approvedStaff}}" wx:key="_id">
+        <view class="staff-info">
+          <view class="staff-avatar approved">{{item.name ? item.name[0] : '员'}}</view>
+          <view class="staff-details">
+            <text class="staff-name">{{item.name}}</text>
+            <text class="staff-phone">{{item.phone}}</text>
+          </view>
+        </view>
+        <view class="staff-status">
+          <text class="status-tag approved">已通过</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

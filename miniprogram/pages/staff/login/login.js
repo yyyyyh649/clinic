@@ -10,7 +10,9 @@ Page({
     confirmPassword: '',
     name: '',
     staffId: '',
-    isLoading: false
+    isLoading: false,
+    wechatBound: false,
+    wechatUserInfo: null
   },
 
   onLoad: function () {
@@ -31,7 +33,9 @@ Page({
       password: '',
       confirmPassword: '',
       name: '',
-      staffId: ''
+      staffId: '',
+      wechatBound: false,
+      wechatUserInfo: null
     });
   },
 
@@ -54,6 +58,73 @@ Page({
 
   onStaffIdInput: function (e) {
     this.setData({ staffId: e.detail.value });
+  },
+
+  // 微信登录
+  onWechatLogin: function () {
+    wx.showLoading({ title: '登录中...' });
+    
+    wx.getUserProfile({
+      desc: '用于店员身份验证',
+      success: (profileRes) => {
+        const userInfo = profileRes.userInfo;
+        
+        wx.cloud.callFunction({
+          name: 'staff',
+          data: {
+            action: 'wechatLogin',
+            userInfo: userInfo
+          },
+          success: res => {
+            if (res.result.code === 0) {
+              const staffInfo = res.result.data.staffInfo;
+              if (!staffInfo.isApproved) {
+                showToast('账号待审核，请联系管理员');
+                return;
+              }
+              
+              wx.setStorageSync('staffInfo', staffInfo);
+              app.globalData.userRole = staffInfo.role || 'staff';
+              showToast('登录成功', 'success');
+              
+              wx.redirectTo({
+                url: '/pages/staff/index/index'
+              });
+            } else {
+              showToast(res.result.message || '微信登录失败');
+            }
+          },
+          fail: err => {
+            console.error('微信登录失败:', err);
+            showToast('登录失败，请重试');
+          },
+          complete: () => {
+            wx.hideLoading();
+          }
+        });
+      },
+      fail: () => {
+        wx.hideLoading();
+        showToast('请授权登录');
+      }
+    });
+  },
+
+  // 微信绑定（用于注册）
+  onWechatBind: function () {
+    wx.getUserProfile({
+      desc: '用于店员账号绑定',
+      success: (profileRes) => {
+        this.setData({
+          wechatBound: true,
+          wechatUserInfo: profileRes.userInfo
+        });
+        showToast('微信授权成功', 'success');
+      },
+      fail: () => {
+        showToast('请授权微信');
+      }
+    });
   },
 
   // 登录
@@ -112,7 +183,7 @@ Page({
 
   // 注册
   handleRegister: function () {
-    const { phone, password, confirmPassword, name, staffId, isLoading } = this.data;
+    const { phone, password, confirmPassword, name, staffId, isLoading, wechatUserInfo } = this.data;
     
     if (isLoading) return;
     
@@ -152,7 +223,8 @@ Page({
           phone,
           password,
           staffId
-        }
+        },
+        userInfo: wechatUserInfo
       },
       success: res => {
         if (res.result.code === 0) {
@@ -166,7 +238,9 @@ Page({
                 password: '',
                 confirmPassword: '',
                 name: '',
-                staffId: ''
+                staffId: '',
+                wechatBound: false,
+                wechatUserInfo: null
               });
             }
           });

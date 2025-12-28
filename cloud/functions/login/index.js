@@ -16,10 +16,10 @@ exports.main = async (event, context) => {
 
   try {
     switch (action) {
-      case 'phoneLogin':
-        return await phoneLogin(openid, event);
       case 'wechatLogin':
         return await wechatLogin(openid, event);
+      case 'bindPhone':
+        return await bindPhone(openid, event);
       case 'updateUserInfo':
         return await updateUserInfo(openid, event);
       case 'getUserInfo':
@@ -44,75 +44,15 @@ exports.main = async (event, context) => {
   }
 };
 
-// 手机号登录
-async function phoneLogin(openid, event) {
-  const { phone, code } = event;
-  
-  // 这里应该验证短信验证码，暂时跳过
-  // TODO: 接入短信验证码服务
-  
-  // 查找或创建用户
-  const users = await db.collection('users').where({ phone }).get();
-  
-  if (users.data.length > 0) {
-    // 用户已存在，更新openid
-    const user = users.data[0];
-    await db.collection('users').doc(user._id).update({
-      data: {
-        openid: openid,
-        lastLoginAt: new Date()
-      }
-    });
-    
-    return {
-      code: 0,
-      data: {
-        userInfo: {
-          ...user,
-          openid: openid
-        }
-      }
-    };
-  } else {
-    // 创建新用户
-    const userId = generateUserId();
-    const newUser = {
-      openid: openid,
-      phone: phone,
-      userId: userId,
-      nickName: '用户' + userId,
-      avatarUrl: '',
-      gender: 0,
-      age: null,
-      points: 0,
-      balance: 0,
-      memberLevel: '普通会员',
-      hasPaymentPassword: false,
-      role: 'customer',
-      createdAt: new Date(),
-      lastLoginAt: new Date()
-    };
-    
-    await db.collection('users').add({ data: newUser });
-    
-    return {
-      code: 0,
-      data: {
-        userInfo: newUser
-      }
-    };
-  }
-}
-
 // 微信登录
 async function wechatLogin(openid, event) {
   const { userInfo } = event;
   
-  // 查找或创建用户
+  // 查找用户
   const users = await db.collection('users').where({ openid }).get();
   
   if (users.data.length > 0) {
-    // 用户已存在，更新信息
+    // 用户已存在，更新信息并登录
     const user = users.data[0];
     await db.collection('users').doc(user._id).update({
       data: {
@@ -130,38 +70,86 @@ async function wechatLogin(openid, event) {
           ...user,
           nickName: userInfo.nickName || user.nickName,
           avatarUrl: userInfo.avatarUrl || user.avatarUrl
-        }
+        },
+        needPhone: false
       }
     };
   } else {
-    // 创建新用户
-    const userId = generateUserId();
-    const newUser = {
-      openid: openid,
-      phone: '',
-      userId: userId,
-      nickName: userInfo.nickName || '用户' + userId,
-      avatarUrl: userInfo.avatarUrl || '',
-      gender: userInfo.gender || 0,
-      age: null,
-      points: 0,
-      balance: 0,
-      memberLevel: '普通会员',
-      hasPaymentPassword: false,
-      role: 'customer',
-      createdAt: new Date(),
-      lastLoginAt: new Date()
+    // 新用户，需要绑定手机号
+    return {
+      code: 0,
+      data: {
+        needPhone: true
+      }
     };
+  }
+}
+
+// 绑定手机号（新用户注册）
+async function bindPhone(openid, event) {
+  const { phone, userInfo } = event;
+  
+  // 检查手机号是否已被使用
+  const existingUsers = await db.collection('users').where({ phone }).get();
+  
+  if (existingUsers.data.length > 0) {
+    // 手机号已存在，检查是否已绑定openid
+    const existingUser = existingUsers.data[0];
+    if (existingUser.openid && existingUser.openid !== openid) {
+      return { code: -1, message: '该手机号已被其他微信账号绑定' };
+    }
     
-    await db.collection('users').add({ data: newUser });
+    // 更新openid到已有账户
+    await db.collection('users').doc(existingUser._id).update({
+      data: {
+        openid: openid,
+        nickName: userInfo.nickName || existingUser.nickName,
+        avatarUrl: userInfo.avatarUrl || existingUser.avatarUrl,
+        gender: userInfo.gender || existingUser.gender,
+        lastLoginAt: new Date()
+      }
+    });
     
     return {
       code: 0,
       data: {
-        userInfo: newUser
+        userInfo: {
+          ...existingUser,
+          openid: openid,
+          nickName: userInfo.nickName || existingUser.nickName,
+          avatarUrl: userInfo.avatarUrl || existingUser.avatarUrl
+        }
       }
     };
   }
+  
+  // 创建新用户
+  const userId = generateUserId();
+  const newUser = {
+    openid: openid,
+    phone: phone,
+    userId: userId,
+    nickName: userInfo.nickName || '用户' + userId,
+    avatarUrl: userInfo.avatarUrl || '',
+    gender: userInfo.gender || 0,
+    age: null,
+    points: 0,
+    balance: 0,
+    memberLevel: '普通会员',
+    hasPaymentPassword: false,
+    role: 'customer',
+    createdAt: new Date(),
+    lastLoginAt: new Date()
+  };
+  
+  await db.collection('users').add({ data: newUser });
+  
+  return {
+    code: 0,
+    data: {
+      userInfo: newUser
+    }
+  };
 }
 
 // 更新用户信息

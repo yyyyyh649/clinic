@@ -17,9 +17,11 @@ exports.main = async (event, context) => {
   try {
     switch (action) {
       case 'register':
-        return await register(openid, event.staffInfo);
+        return await register(openid, event.staffInfo, event.userInfo);
       case 'login':
         return await login(event.phone, event.password);
+      case 'wechatLogin':
+        return await wechatLogin(openid, event.userInfo);
       case 'getStaffInfo':
         return await getStaffInfo(openid);
       case 'searchCustomer':
@@ -55,7 +57,7 @@ exports.main = async (event, context) => {
 };
 
 // 店员注册
-async function register(openid, staffInfo) {
+async function register(openid, staffInfo, userInfo) {
   // 检查手机号是否已注册
   const existing = await db.collection('staff').where({
     phone: staffInfo.phone
@@ -71,6 +73,8 @@ async function register(openid, staffInfo) {
     phone: staffInfo.phone,
     password: staffInfo.password, // 实际应加密存储
     staffId: staffInfo.staffId,
+    nickName: userInfo ? userInfo.nickName : '',
+    avatarUrl: userInfo ? userInfo.avatarUrl : '',
     role: 'staff', // staff 或 admin
     isApproved: false,
     createdAt: new Date()
@@ -105,6 +109,42 @@ async function login(phone, password) {
     code: 0,
     data: {
       staffInfo: staffInfo
+    }
+  };
+}
+
+// 微信登录（店员）
+async function wechatLogin(openid, userInfo) {
+  // 查找店员
+  const staff = await db.collection('staff').where({ openid }).get();
+  
+  if (staff.data.length === 0) {
+    return { code: -1, message: '未找到关联的店员账号，请先注册' };
+  }
+  
+  const staffInfo = staff.data[0];
+  
+  if (!staffInfo.isApproved) {
+    return { code: -1, message: '账号待审核，请联系管理员' };
+  }
+  
+  // 更新微信信息
+  await db.collection('staff').doc(staffInfo._id).update({
+    data: {
+      nickName: userInfo.nickName || staffInfo.nickName,
+      avatarUrl: userInfo.avatarUrl || staffInfo.avatarUrl,
+      lastLoginAt: new Date()
+    }
+  });
+  
+  return {
+    code: 0,
+    data: {
+      staffInfo: {
+        ...staffInfo,
+        nickName: userInfo.nickName || staffInfo.nickName,
+        avatarUrl: userInfo.avatarUrl || staffInfo.avatarUrl
+      }
     }
   };
 }

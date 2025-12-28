@@ -6,9 +6,9 @@ const { showToast, isValidPhone } = require('../../utils/util');
 Page({
   data: {
     phone: '',
-    code: '',
-    countdown: 0,
-    isLoading: false
+    showPhoneInput: false,
+    isLoading: false,
+    pendingUserInfo: null
   },
 
   onLoad: function () {
@@ -27,40 +27,9 @@ Page({
     });
   },
 
-  // 验证码输入
-  onCodeInput: function (e) {
-    this.setData({
-      code: e.detail.value
-    });
-  },
-
-  // 发送验证码
-  sendCode: function () {
-    const { phone } = this.data;
-    
-    if (!isValidPhone(phone)) {
-      showToast('请输入正确的手机号');
-      return;
-    }
-
-    // 模拟发送验证码
-    showToast('验证码已发送', 'success');
-    
-    // 开始倒计时
-    this.setData({ countdown: 60 });
-    const timer = setInterval(() => {
-      if (this.data.countdown <= 1) {
-        clearInterval(timer);
-        this.setData({ countdown: 0 });
-      } else {
-        this.setData({ countdown: this.data.countdown - 1 });
-      }
-    }, 1000);
-  },
-
-  // 手机号登录
-  handleLogin: function () {
-    const { phone, code, isLoading } = this.data;
+  // 提交手机号完成注册
+  submitPhone: function () {
+    const { phone, isLoading, pendingUserInfo } = this.data;
     
     if (isLoading) return;
     
@@ -68,36 +37,31 @@ Page({
       showToast('请输入正确的手机号');
       return;
     }
-    
-    if (!code || code.length !== 6) {
-      showToast('请输入6位验证码');
-      return;
-    }
 
     this.setData({ isLoading: true });
     
-    // 调用登录接口
+    // 绑定手机号到微信账号
     wx.cloud.callFunction({
       name: 'login',
       data: {
-        action: 'phoneLogin',
+        action: 'bindPhone',
         phone: phone,
-        code: code
+        userInfo: pendingUserInfo
       },
       success: res => {
         if (res.result.code === 0) {
           app.saveUserInfo(res.result.data.userInfo);
-          showToast('登录成功', 'success');
+          showToast('注册成功', 'success');
           wx.switchTab({
             url: '/pages/index/index'
           });
         } else {
-          showToast(res.result.message || '登录失败');
+          showToast(res.result.message || '注册失败');
         }
       },
       fail: err => {
-        console.error('登录失败:', err);
-        showToast('登录失败，请重试');
+        console.error('注册失败:', err);
+        showToast('注册失败，请重试');
       },
       complete: () => {
         this.setData({ isLoading: false });
@@ -112,7 +76,7 @@ Page({
       
       app.login(result => {
         if (result.openid) {
-          // 更新用户信息
+          // 微信登录
           wx.cloud.callFunction({
             name: 'login',
             data: {
@@ -120,12 +84,24 @@ Page({
               userInfo: e.detail.userInfo
             },
             success: res => {
+              wx.hideLoading();
               if (res.result.code === 0) {
-                app.saveUserInfo(res.result.data.userInfo);
-                showToast('登录成功', 'success');
-                wx.switchTab({
-                  url: '/pages/index/index'
-                });
+                const userData = res.result.data;
+                if (userData.needPhone) {
+                  // 新用户需要填写手机号
+                  this.setData({
+                    showPhoneInput: true,
+                    pendingUserInfo: e.detail.userInfo
+                  });
+                  showToast('请填写手机号完成注册');
+                } else {
+                  // 已有手机号，直接登录
+                  app.saveUserInfo(userData.userInfo);
+                  showToast('登录成功', 'success');
+                  wx.switchTab({
+                    url: '/pages/index/index'
+                  });
+                }
               } else {
                 showToast(res.result.message || '登录失败');
               }
@@ -133,8 +109,6 @@ Page({
             fail: err => {
               console.error('微信登录失败:', err);
               showToast('登录失败，请重试');
-            },
-            complete: () => {
               wx.hideLoading();
             }
           });

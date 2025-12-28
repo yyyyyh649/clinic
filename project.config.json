@@ -41,7 +41,7 @@
   },
   "compileType": "miniprogram",
   "libVersion": "2.19.4",
-  "appid": "your-appid",
+  "appid": "wx1234567890abcdef",
   "projectname": "optical-store-miniprogram",
   "condition": {},
   "editorSetting": {

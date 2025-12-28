@@ -70,53 +70,65 @@ Page({
   },
 
   // 微信授权登录
-  onGetUserInfo: function (e) {
-    if (e.detail.userInfo) {
-      wx.showLoading({ title: '登录中...' });
-      
-      app.login(result => {
-        if (result.openid) {
-          // 微信登录
-          wx.cloud.callFunction({
-            name: 'login',
-            data: {
-              action: 'wechatLogin',
-              userInfo: e.detail.userInfo
-            },
-            success: res => {
-              wx.hideLoading();
-              if (res.result.code === 0) {
-                const userData = res.result.data;
-                if (userData.needPhone) {
-                  // 新用户需要填写手机号
-                  this.setData({
-                    showPhoneInput: true,
-                    pendingUserInfo: e.detail.userInfo
-                  });
-                  showToast('请填写手机号完成注册');
+  onGetUserInfo: function () {
+    wx.showLoading({ title: '登录中...' });
+    
+    // 使用 wx.getUserProfile 替代已废弃的 open-type="getUserInfo"
+    wx.getUserProfile({
+      desc: '用于完善会员资料',
+      success: (profileRes) => {
+        const userInfo = profileRes.userInfo;
+        
+        app.login(result => {
+          if (result.openid) {
+            // 微信登录
+            wx.cloud.callFunction({
+              name: 'login',
+              data: {
+                action: 'wechatLogin',
+                userInfo: userInfo
+              },
+              success: res => {
+                if (res.result.code === 0) {
+                  const userData = res.result.data;
+                  if (userData.needPhone) {
+                    // 新用户需要填写手机号
+                    this.setData({
+                      showPhoneInput: true,
+                      pendingUserInfo: userInfo
+                    });
+                    showToast('请填写手机号完成注册');
+                  } else {
+                    // 已有手机号，直接登录
+                    app.saveUserInfo(userData.userInfo);
+                    showToast('登录成功', 'success');
+                    wx.switchTab({
+                      url: '/pages/index/index'
+                    });
+                  }
                 } else {
-                  // 已有手机号，直接登录
-                  app.saveUserInfo(userData.userInfo);
-                  showToast('登录成功', 'success');
-                  wx.switchTab({
-                    url: '/pages/index/index'
-                  });
+                  showToast(res.result.message || '登录失败');
                 }
-              } else {
-                showToast(res.result.message || '登录失败');
+              },
+              fail: err => {
+                console.error('微信登录失败:', err);
+                showToast('登录失败，请重试');
+              },
+              complete: () => {
+                wx.hideLoading();
               }
-            },
-            fail: err => {
-              console.error('微信登录失败:', err);
-              showToast('登录失败，请重试');
-              wx.hideLoading();
-            }
-          });
-        }
-      });
-    } else {
-      showToast('请授权登录');
-    }
+            });
+          } else {
+            wx.hideLoading();
+            showToast('获取微信信息失败');
+          }
+        });
+      },
+      fail: () => {
+        wx.hideLoading();
+        showToast('请授权登录');
+      }
+    });
   },
 
   // 查看用户协议

@@ -12,7 +12,7 @@
   <!-- 登录表单 -->
   <view class="login-form">
     <!-- 微信授权登录 -->
-    <button class="wechat-btn primary" open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+    <button class="wechat-btn primary" bindtap="onGetUserInfo">
       <text class="wechat-icon">💬</text>
       <text>微信授权登录</text>
     </button>

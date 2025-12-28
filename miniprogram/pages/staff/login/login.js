@@ -61,59 +61,70 @@ Page({
   },
 
   // 微信登录
-  onWechatLogin: function (e) {
-    if (e.detail.userInfo) {
-      wx.showLoading({ title: '登录中...' });
-      
-      wx.cloud.callFunction({
-        name: 'staff',
-        data: {
-          action: 'wechatLogin',
-          userInfo: e.detail.userInfo
-        },
-        success: res => {
-          if (res.result.code === 0) {
-            const staffInfo = res.result.data.staffInfo;
-            if (!staffInfo.isApproved) {
-              showToast('账号待审核，请联系管理员');
-              return;
+  onWechatLogin: function () {
+    wx.showLoading({ title: '登录中...' });
+    
+    wx.getUserProfile({
+      desc: '用于店员身份验证',
+      success: (profileRes) => {
+        const userInfo = profileRes.userInfo;
+        
+        wx.cloud.callFunction({
+          name: 'staff',
+          data: {
+            action: 'wechatLogin',
+            userInfo: userInfo
+          },
+          success: res => {
+            if (res.result.code === 0) {
+              const staffInfo = res.result.data.staffInfo;
+              if (!staffInfo.isApproved) {
+                showToast('账号待审核，请联系管理员');
+                return;
+              }
+              
+              wx.setStorageSync('staffInfo', staffInfo);
+              app.globalData.userRole = staffInfo.role || 'staff';
+              showToast('登录成功', 'success');
+              
+              wx.redirectTo({
+                url: '/pages/staff/index/index'
+              });
+            } else {
+              showToast(res.result.message || '微信登录失败');
             }
-            
-            wx.setStorageSync('staffInfo', staffInfo);
-            app.globalData.userRole = staffInfo.role || 'staff';
-            showToast('登录成功', 'success');
-            
-            wx.redirectTo({
-              url: '/pages/staff/index/index'
-            });
-          } else {
-            showToast(res.result.message || '微信登录失败');
+          },
+          fail: err => {
+            console.error('微信登录失败:', err);
+            showToast('登录失败，请重试');
+          },
+          complete: () => {
+            wx.hideLoading();
           }
-        },
-        fail: err => {
-          console.error('微信登录失败:', err);
-          showToast('登录失败，请重试');
-        },
-        complete: () => {
-          wx.hideLoading();
-        }
-      });
-    } else {
-      showToast('请授权登录');
-    }
+        });
+      },
+      fail: () => {
+        wx.hideLoading();
+        showToast('请授权登录');
+      }
+    });
   },
 
   // 微信绑定（用于注册）
-  onWechatBind: function (e) {
-    if (e.detail.userInfo) {
-      this.setData({
-        wechatBound: true,
-        wechatUserInfo: e.detail.userInfo
-      });
-      showToast('微信授权成功', 'success');
-    } else {
-      showToast('请授权微信');
-    }
+  onWechatBind: function () {
+    wx.getUserProfile({
+      desc: '用于店员账号绑定',
+      success: (profileRes) => {
+        this.setData({
+          wechatBound: true,
+          wechatUserInfo: profileRes.userInfo
+        });
+        showToast('微信授权成功', 'success');
+      },
+      fail: () => {
+        showToast('请授权微信');
+      }
+    });
   },
 
   // 登录
